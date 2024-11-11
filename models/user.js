@@ -29,11 +29,11 @@ const UserSchema = new mongoose.Schema({//mongoose에서 스키마를 불러와�
         {   
             posts_id: {//포스트가 지워지면 포스트와 관련된 코멘트도 지워져야 하기 때문. 
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: "posts",//참조
+                ref: "post",//참조
             },
             comment_id: {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: "comments",
+                ref: "comment",
             }, 
         }, 
     ], 
