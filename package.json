@@ -2,8 +2,9 @@
   "name": "theagweb",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon ./server/server.js --exec babel-node"
+    "dev": "nodemon --exec babel-node ./server/server.js"
   },
   "keywords": [],
   "author": "",
