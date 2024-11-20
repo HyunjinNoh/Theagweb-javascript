@@ -56,19 +56,23 @@ router.post('/', (req, res)=> {
                     jwt.sign(
                         {id: user.id},
                         JWT_SECRET,//비밀값 등록
-                        {expiresIn: 3600}),//단위는 초
-                        (err, token) => {
+                        {expiresIn: 3600},//단위는 초
+                        (err, token) => {//user post할 때 token 볼 수 있음
                             if(err) throw err;
                             res.json({
-                                id: user.id, 
-                                name: user.name, 
-                                email: user.email,
-                            })
+                                token,
+                                user: {
+                                    id: user.id, 
+                                    name: user.name, 
+                                    email: user.email,
+                                },
+                            });
                         }
-                })
-            })
-        })
-    }))
-})
+                    );              
+                });
+            });
+        });
+    }));
+});
 
 export default router;

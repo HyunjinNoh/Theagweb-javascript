@@ -1,5 +1,6 @@
 import express from 'express';
 import Post from '../../../models/post.js';
+import auth from '../../middleware/auth.js';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get('/', async(req, res) => { //request, response. 마지막에는 서버
     res.json(postFindResult);
 })
 
-router.post('/', async(req, res, next)=>{
+router.post('/', auth, async(req, res, next)=>{//auth 미들웨어 끼어 넣어서 인증된 사용자만 글을 작성할 수 있도록. 
     try{
         console.log(req, "req");//어떤 것이 들어왔을까
         const {title, contents, fileUrl, creator} = req.body;//models 폴더에 post에 뭐가 있는지. req.body 안에 요청을 보냄. 구조분해 문법
