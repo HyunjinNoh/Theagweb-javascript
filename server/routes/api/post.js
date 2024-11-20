@@ -22,9 +22,9 @@ router.post('/', async(req, res, next)=>{
             creator,
         });//mongoDB쓸 때는 async await 을 써야 실행이 된다. 아니면 exec() 써줘야 함. 
         res.json(newPost);
-        }catch(e) {
-            console.log(e);
-        }
+    }catch(e) {
+        console.log(e);
+    }
     });
 
     export default router;//기본 내보내기. 한 개만 내보냄. 다른 곳에서 import할 때 이름을 따로 지정할 수 있다. 
