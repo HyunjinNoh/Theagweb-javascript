@@ -9,14 +9,11 @@ import {
   Col,
   Progress,
 } from "reactstrap";
-import {CKEditor} from "@ckeditor/ckeditor5-react"; // CKEditor 설정 변경됨
+import { CKEditor } from "@ckeditor/ckeditor5-react"; 
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { editorConfiguration } from "../../components/editor/EditorConfig";
 import Myinit from "../../components/editor/UploadAdapter";
 import { POST_UPLOADING_REQUEST } from "../../redux/types";
-
-import dotenv from "dotenv";
-dotenv.config();
 
 const PostWrite = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -79,7 +76,7 @@ const PostWrite = () => {
     } else {
       setValues({
         ...form,
-        fileUrl: process.env.REACT_APP_BASIC_IMAGE_URL,
+        fileUrl: '../../src/assets/img/page-image.png',
         contents: data,
       });
     }

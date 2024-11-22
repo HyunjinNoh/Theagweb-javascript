@@ -9,7 +9,7 @@ import {
   Col,
   Progress,
 } from "reactstrap";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
 import { editorConfiguration } from "../../components/editor/EditorConfig";
 import Myinit from "../../components/editor/UploadAdapter";
@@ -87,7 +87,7 @@ const PostEdit = () => {
     } else {
       setValues({
         ...form,
-        fileUrl: process.env.REACT_APP_BASIC_IMAGE_URL,
+        fileUrl: '../../src/assets/img/page-image.png',
         contents: data,
       });
     }
