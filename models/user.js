@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({//mongoose에서 스키마를 불러와�
     },
     role: {
         type: String, 
-        enum: ["Owner", "Reporter", "User"], 
+        enum: ["Developer", "Reporter", "User"], 
         default: "User",//가입하는 모든 사람들은 그냥 User
     },
     register_date: {
