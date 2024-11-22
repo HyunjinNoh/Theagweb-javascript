@@ -122,7 +122,7 @@ const PostWrite = () => {
               block
               className="mt-3 col-md-2 offset-md-10 mb-3"
             >
-              업로드하기
+              포스팅하기
             </Button>
           </FormGroup>
         </Form>

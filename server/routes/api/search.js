@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import Post from "../../models/post.js";
+import Post from "../../../models/post.js";
 
 router.get("/:searchTerm", async (req, res, next) => {
   try {

@@ -2,12 +2,12 @@ import express from "express";
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
-import config from "../../config/index";
-import auth from "../../middleware/auth";
+import config from "../../config/index.js";
+import auth from "../../middleware/auth.js";
 const { JWT_SECRET } = config;
 
 // Model
-import User from "../../models/user";
+import User from "../../../models/user.js";
 
 const router = express.Router();
 

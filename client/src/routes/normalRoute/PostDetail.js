@@ -28,7 +28,6 @@ const PostDetail = (req) => {
   const { userId, userName } = useSelector((state) => state.auth);
   const { comments } = useSelector((state) => state.comment);
 
-  console.log(req);
   useEffect(() => {
     dispatch({
       type: POST_DETAIL_LOADING_REQUEST,
@@ -173,7 +172,6 @@ const PostDetail = (req) => {
     </>
   );
 
-  console.log(comments, "Comments");
   return (
     <div>
       <Helmet title={`Post | ${title}`} />

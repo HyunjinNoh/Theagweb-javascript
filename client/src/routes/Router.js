@@ -3,7 +3,7 @@ import Header from "../components/Header.js";
 import Footer from "../components/Footer.js";
 import AppNavbar from "../components/AppNavbar";
 import { Container } from "reactstrap";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom"; // Navigate 사용
 import PostCardList from "./normalRoute/PostCardList";
 import PostWrite from "./normalRoute/PostWrite";
 import PostDetail from "./normalRoute/PostDetail";
@@ -21,24 +21,16 @@ const MyRouter = () => (
     <AppNavbar />
     <Header />
     <Container id="main-body">
-      <Switch>
-        <Route path="/" exact component={PostCardList} />
-        <Route path="/post" exact component={PostWrite} />
-        <Route path="/post/:id" exact component={PostDetail} />
-        <EditProtectedRoute path="/post/:id/edit" exact component={PostEdit} />
-        <Route
-          path="/post/category/:categoryName"
-          exact
-          component={CategoryResult}
-        />
-        <Route path="/search/:searchTerm" exact component={Search} />
-        <ProfileProtectedRoute
-          path="/user/:userName/profile"
-          exact
-          component={Profile}
-        />
-        <Redirect from="*" to="/" />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<PostCardList />} />
+        <Route path="/post" element={<PostWrite />} />
+        <Route path="/post/:id" element={<PostDetail />} />
+        <Route path="/post/:id/edit" element={<EditProtectedRoute component={PostEdit} />} />
+        <Route path="/post/category/:categoryName" element={<CategoryResult />} />
+        <Route path="/search/:searchTerm" element={<Search />} />
+        <Route path="/user/:userName/profile" element={<ProfileProtectedRoute component={Profile} />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Container>
     <Footer />
   </Fragment>

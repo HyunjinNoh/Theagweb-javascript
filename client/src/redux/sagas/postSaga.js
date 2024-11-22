@@ -1,6 +1,6 @@
 import axios from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
-import { push } from "connected-react-router";
+import { push } from "redux-first-history"; // updated import
 import {
   POSTS_LOADING_FAILURE,
   POSTS_LOADING_SUCCESS,
@@ -78,7 +78,7 @@ function* uploadPosts(action) {
       type: POST_UPLOADING_SUCCESS,
       payload: result.data,
     });
-    yield put(push(`/post/${result.data._id}`));
+    yield put(push(`/post/${result.data._id}`)); // updated to use push from redux-first-history
   } catch (e) {
     yield put({
       type: POST_UPLOADING_FAILURE,
@@ -215,7 +215,7 @@ function* PostEditUpload(action) {
       type: POST_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
     });
-    yield put(push(`/post/${result.data._id}`));
+    yield put(push(`/post/${result.data._id}`)); // updated to use push from redux-first-history
   } catch (e) {
     yield put({
       type: POST_EDIT_UPLOADING_FAILURE,
@@ -264,7 +264,7 @@ function* SearchResult(action) {
       type: SEARCH_SUCCESS,
       payload: result.data,
     });
-    yield put(push(`/search/${encodeURIComponent(action.payload)}`));
+    yield put(push(`/search/${encodeURIComponent(action.payload)}`)); // updated to use push from redux-first-history
   } catch (e) {
     yield put({
       type: SEARCH_FAILURE,

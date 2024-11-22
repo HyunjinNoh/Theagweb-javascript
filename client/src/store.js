@@ -1,28 +1,31 @@
-import { configureStore, compose, applyMiddleware } from "redux";
-import createSagaMiddleware from "redux-saga";
-import { createBrowserHistory } from "history";
-import { routerMiddleware } from "connected-react-router";
+import { configureStore } from '@reduxjs/toolkit'; // Import configureStore from @reduxjs/toolkit
+import createSagaMiddleware from 'redux-saga';
+import { createBrowserHistory } from 'history'; // Import createBrowserHistory from history
+import { createReduxHistoryContext } from 'redux-first-history'; // Import createReduxHistoryContext
 
-import createRootReducer from "./redux/reducers/index";
-import rootSaga from "./redux/sagas";
+import createRootReducer from './redux/reducers/index';
+import rootSaga from './redux/sagas';
 
 export const history = createBrowserHistory();
 
+// Create history context
+const { routerMiddleware } = createReduxHistoryContext({
+  history, // Pass history to createReduxHistoryContext
+  basename: '', // Optional: specify if you have a base URL path for routing
+});
+
 const sagaMiddleware = createSagaMiddleware();
 
-const initialState = {};
+// Set up middlewares
+const middlewares = [sagaMiddleware, routerMiddleware];
 
-const middlewares = [sagaMiddleware, routerMiddleware(history)];
-const devtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+const store = configureStore({
+  reducer: createRootReducer(history), // Use the root reducer with history
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(middlewares), // Combine default middleware and custom middleware
+  devTools: process.env.NODE_ENV !== 'production', // Enable devTools in non-production environments
+});
 
-const composeEnhancer =
-  process.env.NODE_ENV === "production" ? compose : devtools || compose;
-
-const store = configureStore(
-  createRootReducer(history),
-  initialState,
-  composeEnhancer(applyMiddleware(...middlewares))
-);
 sagaMiddleware.run(rootSaga);
 
 export default store;

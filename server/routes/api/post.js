@@ -1,12 +1,12 @@
 import express from "express";
 
 // Model
-import Post from "../../models/post";
-import User from "../../models/user";
-import Category from "../../models/category";
-import Comment from "../../models/comment";
+import Post from "../../../models/post.js";
+import User from "../../../models/user.js";
+import Category from "../../../models/category.js";
+import Comment from "../../../models/comment.js";
 import "@babel/polyfill";
-import auth from "../../middleware/auth";
+import auth from "../../middleware/auth.js";
 import moment from "moment";
 
 const router = express.Router();
@@ -16,7 +16,7 @@ import multerS3 from "multer-s3";
 import path from "path";
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 
 dotenv.config();
 
