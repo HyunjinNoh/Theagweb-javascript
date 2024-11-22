@@ -17,7 +17,7 @@ const PostSchema = new mongoose.Schema({
   },
   fileUrl: {
     type: String,
-    default: "https://source.unsplash.com/random/301x201", //썸네일 랜덤으로 불러오는 사이트(다른 그림 파일로 대체 가능)
+    default: "client/src/assets/img/page-image.png",
   },
   date: {
     type: String,

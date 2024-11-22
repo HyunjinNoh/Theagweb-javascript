@@ -22,7 +22,7 @@ const CategoryResult = () => {
 
   return (
     <div>
-      <h1>Category: "{categoryName}"</h1>
+      <h1 style={{ fontSize: '20px' }}>Category: "{categoryName}"</h1>
       <Row>
         <PostCardOne posts={categoryFindResult.posts} />
       </Row>

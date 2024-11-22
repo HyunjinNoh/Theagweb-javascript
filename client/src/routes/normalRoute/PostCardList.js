@@ -75,7 +75,7 @@ const PostCardList = () => {
     <Fragment>
       <Helmet title="Home" />
 
-      <Row className="border-bottom border-top border-primary py-2 mb-3 ">
+      <Row className="border-bottom border-top border-light py-2 mb-3 ">
         <Category posts={categoryFindResult} />
       </Row>
 
