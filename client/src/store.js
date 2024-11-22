@@ -20,12 +20,16 @@ const sagaMiddleware = createSagaMiddleware();
 const middlewares = [sagaMiddleware, routerMiddleware];
 
 const store = configureStore({
-  reducer: createRootReducer(history), // Use the root reducer with history
+  reducer: createRootReducer(history),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(middlewares), // Combine default middleware and custom middleware
-  devTools: process.env.NODE_ENV !== 'production', // Enable devTools in non-production environments
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['REGISTER_FAILURE'], // Ignore specific actions
+        ignoredPaths: ['auth.headers'], // Ignore non-serializable paths in the state
+      },
+    }).concat(middlewares), // Combine default and custom middlewares
+  devTools: process.env.NODE_ENV !== 'production',
 });
-
 sagaMiddleware.run(rootSaga);
 
 export default store;
