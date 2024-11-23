@@ -1,5 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
   POST_DETAIL_LOADING_REQUEST,
@@ -7,7 +8,6 @@ import {
   USER_LOADING_REQUEST,
 } from "../../redux/types";
 import { Button, Row, Col, Container } from "reactstrap";
-import { Link } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { GrowingSpinner } from "../../components/spinner/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,8 +20,9 @@ import BalloonEditor from "@ckeditor/ckeditor5-editor-balloon/src/ballooneditor"
 import { editorConfiguration } from "../../components/editor/EditorConfig";
 import Comments from "../../components/comments/Comments";
 
-const PostDetail = (req) => {
+const PostDetail = () => {
   const dispatch = useDispatch();
+  const { id } = useParams(); // React Router v6 방식으로 변경
   const { postDetail, creatorId, title, loading } = useSelector(
     (state) => state.post
   );
@@ -31,19 +32,19 @@ const PostDetail = (req) => {
   useEffect(() => {
     dispatch({
       type: POST_DETAIL_LOADING_REQUEST,
-      payload: req.match.params.id,
+      payload: id,
     });
     dispatch({
       type: USER_LOADING_REQUEST,
       payload: localStorage.getItem("token"),
     });
-  }, [dispatch, req.match.params.id]);
+  }, [dispatch, id]);
 
   const onDeleteClick = () => {
     dispatch({
       type: POST_DELETE_REQUEST,
       payload: {
-        id: req.match.params.id,
+        id,
         token: localStorage.getItem("token"),
       },
     });
@@ -59,7 +60,7 @@ const PostDetail = (req) => {
         </Col>
         <Col className="col-md-3 mr-md-3">
           <Link
-            to={`/post/${req.match.params.id}/edit`}
+            to={`/post/${id}/edit`}
             className="btn btn-success btn-block"
           >
             Edit Post
@@ -90,23 +91,19 @@ const PostDetail = (req) => {
     <>
       {userId === creatorId ? EditButton : HomeButton}
       <Row className="border-bottom border-top border-primary p-3 mb-3 d-flex justify-content-between">
-        {(() => {
-          if (postDetail && postDetail.creator) {
-            return (
-              <Fragment>
-                <div className="font-weight-bold text-big">
-                  <span className="mr-3">
-                    <Button color="info">
-                      {postDetail.category.categoryName}
-                    </Button>
-                  </span>
-                  {postDetail.title}
-                </div>
-                <div className="align-self-end">{postDetail.creator.name}</div>
-              </Fragment>
-            );
-          }
-        })()}
+        {postDetail && postDetail.creator ? (
+          <Fragment>
+            <div className="font-weight-bold text-big">
+              <span className="mr-3">
+                <Button color="info">
+                  {postDetail.category.categoryName}
+                </Button>
+              </span>
+              {postDetail.title}
+            </div>
+            <div className="align-self-end">{postDetail.creator.name}</div>
+          </Fragment>
+        ) : null}
       </Row>
       {postDetail && postDetail.comments ? (
         <Fragment>
@@ -125,7 +122,7 @@ const PostDetail = (req) => {
           <Row className="mb-3">
             <CKEditor
               editor={BalloonEditor}
-              data={postDetail.contents}
+              data={postDetail.contents || ""}
               config={editorConfiguration}
               disabled="true"
             />
@@ -158,16 +155,12 @@ const PostDetail = (req) => {
                     )
                   )
                 : "Creator"}
-              <Comments
-                id={req.match.params.id}
-                userId={userId}
-                userName={userName}
-              />
+              <Comments id={id} userId={userId} userName={userName} />
             </Container>
           </Row>
         </Fragment>
       ) : (
-        <h1>hi</h1>
+        <h1>Loading...</h1>
       )}
     </>
   );

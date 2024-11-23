@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "../../config/index.js";
 import auth from "../../middleware/auth.js";
+import { adminMiddleware } from "../../middleware/auth.js"; // 개발자의 권한 관리용
 const { JWT_SECRET } = config;
 
 // Model
@@ -46,6 +47,7 @@ router.post("/", (req, res) => {
       name,
       email,
       password,
+      role: "User", // 기본 역할 설정
     });
 
     bcrypt.genSalt(10, (err, salt) => {
@@ -65,6 +67,7 @@ router.post("/", (req, res) => {
                   id: user.id,
                   name: user.name,
                   email: user.email,
+                  role: user.role, // 역할 추가
                 },
               });
             }
@@ -111,6 +114,51 @@ router.post("/:userName/profile", auth, async (req, res) => {
     });
   } catch (e) {
     console.log(e);
+  }
+});
+
+// 개발자가 User을 글 포스팅 가능한 Reporter로 바꿔주기 위한 api 
+// @route    PUT api/user/role/:id
+// @desc     Update user role
+// @access   Private (Developer only) 
+router.put("/role/:id", [auth, adminMiddleware], async (req, res) => {
+  try {
+    const { role } = req.body; // 변경할 역할 받기
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // 역할 변경
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({ msg: "User role updated successfully", user });
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+// 테스트용. 회원 삭제 api
+// @route    DELETE api/user/:id
+// @desc     Delete a user
+// @access   Private (Admin/Developer only)
+router.delete("/:id", [auth, adminMiddleware], async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    await user.remove(); // 사용자 삭제
+
+    res.status(200).json({ msg: "User deleted successfully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ msg: "Server error" });
   }
 });
 

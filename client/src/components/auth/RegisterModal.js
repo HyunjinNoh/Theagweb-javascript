@@ -63,7 +63,7 @@ const RegisterModal = () => {
         Register
       </NavLink>
       <Modal isOpen={modal} toggle={handleToggle}>
-        <ModalHeader toggle={handleToggle}>Register</ModalHeader>
+        <ModalHeader toggle={handleToggle}>Register (Recommended to Reporters)</ModalHeader>
         <ModalBody>
           {localMsg ? <Alert color="danger">{localMsg}</Alert> : null}
           <Form onSubmit={onSubmit}>

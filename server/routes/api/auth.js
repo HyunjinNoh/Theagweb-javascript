@@ -11,6 +11,7 @@ import User from '../../../models/user.js';
 
 const router = express.Router();
 
+//유저의 토큰 조회
 //@route POST api/auth
 //@desc Auth user
 //@access Public //로그인 모든 사람 접근 가능
