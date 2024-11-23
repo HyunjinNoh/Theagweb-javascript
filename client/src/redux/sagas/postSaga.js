@@ -1,6 +1,6 @@
 import axios from "axios";
 import { put, call, takeEvery, all, fork } from "redux-saga/effects";
-import { push } from "redux-first-history"; // updated import
+import { push } from "redux-first-history"; // Updated import
 import {
   POSTS_LOADING_FAILURE,
   POSTS_LOADING_SUCCESS,
@@ -28,21 +28,18 @@ import {
   SEARCH_REQUEST,
 } from "../types";
 
-// All Posts load
-
-const loadPostAPI = (payload) => {
-  return axios.get(`/api/post/skip/${payload}`);
-};
+// All Posts Load
+const loadPostAPI = (payload) => axios.get(`/api/post/skip/${payload}`);
 
 function* loadPosts(action) {
   try {
     const result = yield call(loadPostAPI, action.payload);
-    console.log(result, "loadPosts");
     yield put({
       type: POSTS_LOADING_SUCCESS,
       payload: result.data,
     });
   } catch (e) {
+    console.error("Load Posts Error:", e.response || e.message);
     yield put({
       type: POSTS_LOADING_FAILURE,
       payload: e,
@@ -55,59 +52,55 @@ function* watchLoadPosts() {
 }
 
 // Post Upload
-
 const uploadPostAPI = (payload) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const token = payload.token;
-  if (token) {
-    config.headers["x-auth-token"] = token;
+  if (payload.token) {
+    config.headers["x-auth-token"] = payload.token;
   }
   return axios.post("/api/post", payload, config);
 };
 
 function* uploadPosts(action) {
   try {
-    console.log(action, "uploadPost function");
     const result = yield call(uploadPostAPI, action.payload);
-    console.log(result, "uploadPostAPI, action.payload");
-    yield put({
-      type: POST_UPLOADING_SUCCESS,
-      payload: result.data,
-    });
-    yield put(push(`/post/${result.data._id}`)); // updated to use push from redux-first-history
+    if (result.data && result.data._id) {
+      yield put({
+        type: POST_UPLOADING_SUCCESS,
+        payload: result.data,
+      });
+      yield put(push(`/`)); // Navigate to the home page after success
+    } else {
+      throw new Error("Invalid post response");
+    }
   } catch (e) {
+    console.error("Post Upload Error:", e.response || e.message);
     yield put({
       type: POST_UPLOADING_FAILURE,
       payload: e,
     });
-    yield put(push("/"));
   }
 }
 
-function* watchuploadPosts() {
+function* watchUploadPosts() {
   yield takeEvery(POST_UPLOADING_REQUEST, uploadPosts);
 }
 
 // Post Detail
-const loadPostDetailAPI = (payload) => {
-  console.log(payload);
-  return axios.get(`/api/post/${payload}`);
-};
+const loadPostDetailAPI = (payload) => axios.get(`/api/post/${payload}`);
 
 function* loadPostDetail(action) {
   try {
-    console.log(action);
     const result = yield call(loadPostDetailAPI, action.payload);
-    console.log(result, "post_detail_saga_data");
     yield put({
       type: POST_DETAIL_LOADING_SUCCESS,
       payload: result.data,
     });
   } catch (e) {
+    console.error("Post Detail Error:", e.response || e.message);
     yield put({
       type: POST_DETAIL_LOADING_FAILURE,
       payload: e,
@@ -116,35 +109,32 @@ function* loadPostDetail(action) {
   }
 }
 
-function* watchloadPostDetail() {
+function* watchLoadPostDetail() {
   yield takeEvery(POST_DETAIL_LOADING_REQUEST, loadPostDetail);
 }
 
 // Post Delete
-const DeletePostAPI = (payload) => {
+const deletePostAPI = (payload) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const token = payload.token;
-
-  if (token) {
-    config.headers["x-auth-token"] = token;
+  if (payload.token) {
+    config.headers["x-auth-token"] = payload.token;
   }
-
   return axios.delete(`/api/post/${payload.id}`, config);
 };
 
-function* DeletePost(action) {
+function* deletePost(action) {
   try {
-    const result = yield call(DeletePostAPI, action.payload);
+    yield call(deletePostAPI, action.payload);
     yield put({
       type: POST_DELETE_SUCCESS,
-      payload: result.data,
     });
     yield put(push("/"));
   } catch (e) {
+    console.error("Post Delete Error:", e.response || e.message);
     yield put({
       type: POST_DELETE_FAILURE,
       payload: e,
@@ -153,33 +143,31 @@ function* DeletePost(action) {
 }
 
 function* watchDeletePost() {
-  yield takeEvery(POST_DELETE_REQUEST, DeletePost);
+  yield takeEvery(POST_DELETE_REQUEST, deletePost);
 }
 
 // Post Edit Load
-const PostEditLoadAPI = (payload) => {
+const postEditLoadAPI = (payload) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const token = payload.token;
-
-  if (token) {
-    config.headers["x-auth-token"] = token;
+  if (payload.token) {
+    config.headers["x-auth-token"] = payload.token;
   }
-
   return axios.get(`/api/post/${payload.id}/edit`, config);
 };
 
-function* PostEditLoad(action) {
+function* postEditLoad(action) {
   try {
-    const result = yield call(PostEditLoadAPI, action.payload);
+    const result = yield call(postEditLoadAPI, action.payload);
     yield put({
       type: POST_EDIT_LOADING_SUCCESS,
       payload: result.data,
     });
   } catch (e) {
+    console.error("Post Edit Load Error:", e.response || e.message);
     yield put({
       type: POST_EDIT_LOADING_FAILURE,
       payload: e,
@@ -189,34 +177,32 @@ function* PostEditLoad(action) {
 }
 
 function* watchPostEditLoad() {
-  yield takeEvery(POST_EDIT_LOADING_REQUEST, PostEditLoad);
+  yield takeEvery(POST_EDIT_LOADING_REQUEST, postEditLoad);
 }
 
-// Post Edit UpLoad
-const PostEditUploadAPI = (payload) => {
+// Post Edit Upload
+const postEditUploadAPI = (payload) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const token = payload.token;
-
-  if (token) {
-    config.headers["x-auth-token"] = token;
+  if (payload.token) {
+    config.headers["x-auth-token"] = payload.token;
   }
-
   return axios.post(`/api/post/${payload.id}/edit`, payload, config);
 };
 
-function* PostEditUpload(action) {
+function* postEditUpload(action) {
   try {
-    const result = yield call(PostEditUploadAPI, action.payload);
+    const result = yield call(postEditUploadAPI, action.payload);
     yield put({
       type: POST_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
     });
-    yield put(push(`/post/${result.data._id}`)); // updated to use push from redux-first-history
+    yield put(push(`/post/${result.data._id}`));
   } catch (e) {
+    console.error("Post Edit Upload Error:", e.response || e.message);
     yield put({
       type: POST_EDIT_UPLOADING_FAILURE,
       payload: e,
@@ -225,22 +211,21 @@ function* PostEditUpload(action) {
 }
 
 function* watchPostEditUpload() {
-  yield takeEvery(POST_EDIT_UPLOADING_REQUEST, PostEditUpload);
+  yield takeEvery(POST_EDIT_UPLOADING_REQUEST, postEditUpload);
 }
 
 // Category Find
-const CategoryFindAPI = (payload) => {
-  return axios.get(`/api/post/category/${encodeURIComponent(payload)}`);
-};
+const categoryFindAPI = (payload) => axios.get(`/api/post/category/${encodeURIComponent(payload)}`);
 
-function* CategoryFind(action) {
+function* categoryFind(action) {
   try {
-    const result = yield call(CategoryFindAPI, action.payload);
+    const result = yield call(categoryFindAPI, action.payload);
     yield put({
       type: CATEGORY_FIND_SUCCESS,
       payload: result.data,
     });
   } catch (e) {
+    console.error("Category Find Error:", e.response || e.message);
     yield put({
       type: CATEGORY_FIND_FAILURE,
       payload: e,
@@ -249,25 +234,22 @@ function* CategoryFind(action) {
 }
 
 function* watchCategoryFind() {
-  yield takeEvery(CATEGORY_FIND_REQUEST, CategoryFind);
+  yield takeEvery(CATEGORY_FIND_REQUEST, categoryFind);
 }
 
 // Search Find
-const SearchResultAPI = (payload) => {
-  console.log("Calling Search API with:", payload); // 디버깅 로그
-  return axios.get(`/api/search/${encodeURIComponent(payload)}`);
-};
+const searchResultAPI = (payload) =>
+  axios.get(`/api/search/${encodeURIComponent(payload)}`);
 
-function* SearchResult(action) {
+function* searchResult(action) {
   try {
-    const result = yield call(SearchResultAPI, action.payload);
-    console.log("Search API result:", result.data); // API 응답 확인
+    const result = yield call(searchResultAPI, action.payload);
     yield put({
       type: SEARCH_SUCCESS,
       payload: result.data,
     });
   } catch (e) {
-    console.error("Search API error:", e.response?.data || e.message); // 에러 로그
+    console.error("Search Error:", e.response || e.message);
     yield put({
       type: SEARCH_FAILURE,
       payload: e.response?.data?.message || "Unknown error",
@@ -276,14 +258,14 @@ function* SearchResult(action) {
 }
 
 function* watchSearchResult() {
-  yield takeEvery(SEARCH_REQUEST, SearchResult);
+  yield takeEvery(SEARCH_REQUEST, searchResult);
 }
 
 export default function* postSaga() {
   yield all([
     fork(watchLoadPosts),
-    fork(watchuploadPosts),
-    fork(watchloadPostDetail),
+    fork(watchUploadPosts),
+    fork(watchLoadPostDetail),
     fork(watchDeletePost),
     fork(watchPostEditLoad),
     fork(watchPostEditUpload),

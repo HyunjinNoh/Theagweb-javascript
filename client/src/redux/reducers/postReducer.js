@@ -34,6 +34,7 @@ const initialState = {
   title: "",
   searchBy: "",
   searchResult: [], // 검색 결과 초기화
+  postUploaded: false, // 포스팅 성공 여부 추가
 };
 
 const postReducer = (state = initialState, action) => {
@@ -62,17 +63,26 @@ const postReducer = (state = initialState, action) => {
         ...state,
         posts: [],
         loading: true,
+        postUploaded: false, // 요청 시 초기화
       };
     case POSTS_WRITE_SUCCESS:
       return {
         ...state,
         loading: false,
+        postUploaded: true, // 포스팅 성공 시 true로 변경
+      };
+    // POST_WRITE_SUCCESS 후 상태 초기화 액션 추가
+    case "RESET_POST_UPLOADING_STATE":
+      return {
+        ...state,
+        postUploaded: false,
       };
     case POSTS_WRITE_FAILURE:
       return {
         ...state,
         error: action.payload,
         loading: false,
+        postUploaded: false, // 실패 시 false
       };
     case POST_DETAIL_LOADING_REQUEST:
       return {
