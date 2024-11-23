@@ -1,45 +1,31 @@
-import React, { useState, useRef, Fragment } from "react";
+import React, { useState } from "react";
 import { Form, Input } from "reactstrap";
-import { useDispatch } from "react-redux";
-import { SEARCH_REQUEST } from "../../redux/types";
+import { useNavigate } from "react-router-dom";
 
 const SearchInput = () => {
-  const dispatch = useDispatch();
-  const [form, setValues] = useState({ searchBy: "" });
+  const [searchBy, setSearchBy] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (e) => {
-    setValues({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-    console.log(form);
+    setSearchBy(e.target.value); // 입력 값을 상태로 저장
   };
 
-  const onSubmit = async (e) => {
-    await e.preventDefault();
-    const { searchBy } = form;
-
-    dispatch({
-      type: SEARCH_REQUEST,
-      payload: searchBy,
-    });
-
-    console.log(searchBy, "Submit Body");
-    resetValue.current.value = "";
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (searchBy.trim() !== "") {
+      navigate(`/search/${searchBy}`); // 검색어를 기반으로 URL 업데이트
+    }
   };
-  const resetValue = useRef(null);
 
   return (
-    <Fragment>
-      <Form onSubmit={onSubmit} className="col mt-2">
-        <Input 
-          name="searchBy" 
-          onChange={onChange} 
-          innerRef={resetValue} 
-          placeholder='Write the search term and press the "Enter" key' // Placeholder 추가
-          />
-      </Form>
-    </Fragment>
+    <Form onSubmit={onSubmit} className="col mt-2">
+      <Input
+        name="searchBy"
+        value={searchBy}
+        onChange={onChange}
+        placeholder='Write the search term and press the "Enter" key'
+      />
+    </Form>
   );
 };
 

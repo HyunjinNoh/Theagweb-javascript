@@ -254,23 +254,24 @@ function* watchCategoryFind() {
 
 // Search Find
 const SearchResultAPI = (payload) => {
+  console.log("Calling Search API with:", payload); // 디버깅 로그
   return axios.get(`/api/search/${encodeURIComponent(payload)}`);
 };
 
 function* SearchResult(action) {
   try {
     const result = yield call(SearchResultAPI, action.payload);
+    console.log("Search API result:", result.data); // API 응답 확인
     yield put({
       type: SEARCH_SUCCESS,
       payload: result.data,
     });
-    yield put(push(`/search/${encodeURIComponent(action.payload)}`)); // updated to use push from redux-first-history
   } catch (e) {
+    console.error("Search API error:", e.response?.data || e.message); // 에러 로그
     yield put({
       type: SEARCH_FAILURE,
-      payload: e,
+      payload: e.response?.data?.message || "Unknown error",
     });
-    yield put(push("/"));
   }
 }
 

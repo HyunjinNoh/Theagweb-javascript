@@ -33,7 +33,7 @@ const initialState = {
   categoryFindResult: "",
   title: "",
   searchBy: "",
-  searchResult: "",
+  searchResult: [], // 검색 결과 초기화
 };
 
 const postReducer = (state = initialState, action) => {
@@ -41,13 +41,13 @@ const postReducer = (state = initialState, action) => {
     case POSTS_LOADING_REQUEST:
       return {
         ...state,
-
+        posts: [], // 데이터 초기화
         loading: true,
       };
     case POSTS_LOADING_SUCCESS:
       return {
         ...state,
-        posts: [...state.posts, ...action.payload.postFindResult],
+        posts: action.payload.postFindResult, // 기존 데이터를 덮어쓰기
         categoryFindResult: action.payload.categoryFindResult,
         postCount: action.payload.postCount,
         loading: false,
@@ -104,7 +104,6 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         postDetail: action.payload,
-
         loading: false,
       };
     case POST_EDIT_LOADING_FAILURE:
@@ -116,7 +115,6 @@ const postReducer = (state = initialState, action) => {
     case POST_EDIT_UPLOADING_REQUEST:
       return {
         ...state,
-
         loading: true,
       };
     case POST_EDIT_UPLOADING_SUCCESS:
@@ -151,24 +149,27 @@ const postReducer = (state = initialState, action) => {
         loading: false,
       };
     case SEARCH_REQUEST:
+      console.log("SEARCH_REQUEST payload:", action.payload); // 디버깅 로그
       return {
         ...state,
-        posts: [],
         searchBy: action.payload,
+        searchResult: [], // 검색 요청 시 결과 초기화
         loading: true,
       };
     case SEARCH_SUCCESS:
+      console.log("SEARCH_SUCCESS payload:", action.payload); // 디버깅 로그
       return {
         ...state,
-        searchBy: action.payload,
-        searchResult: action.payload,
+        searchResult: action.payload, // 검색 결과를 덮어쓰기
         loading: false,
       };
     case SEARCH_FAILURE:
+      console.log("SEARCH_FAILURE payload:", action.payload); // 디버깅 로그
       return {
         ...state,
-        searchResult: action.payload,
+        searchResult: [],
         loading: false,
+        error: action.payload,
       };
     default:
       return state;
