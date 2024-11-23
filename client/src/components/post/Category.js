@@ -15,7 +15,7 @@ const Category = ({ posts }) => {
               >
                 <span className="ml-1">
                   <Button color="info">
-                    {categoryName} <Badge color="light">{posts.length}</Badge>
+                    {categoryName} <Badge color="#fffedd">{posts.length}</Badge>
                   </Button>
                 </span>
               </Link>

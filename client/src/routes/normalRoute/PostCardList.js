@@ -86,7 +86,7 @@ const PostCardList = () => {
         ""
       ) : endMsg ? (
         <div>
-          <Alert color="danger" className="text-center font-weight-bolder">
+          <Alert color="light" className="text-center font-weight-bolder">
             더 이상의 포스트는 없습니다
           </Alert>
         </div>

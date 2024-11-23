@@ -7,42 +7,42 @@ export const GrowingSpinner = (
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="primary"
+        color="#fffedd"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="secondary"
+        color="#1f2a4b"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="success"
+        color="#fffedd"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="danger"
+        color="#1f2a4b"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="warning"
+        color="#fffedd"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="info"
+        color="#1f2a4b"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="light"
+        color="#fffedd"
       />
       <Spinner
         style={{ width: "2rem", height: "2rem" }}
         type="grow"
-        color="dark"
+        color="#1f2a4b"
       />
     </Row>
   </Fragment>

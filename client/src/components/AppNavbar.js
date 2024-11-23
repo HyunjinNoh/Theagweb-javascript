@@ -52,7 +52,7 @@ const AppNavbar = () => {
           <Form className="col mt-2">
             <Link
               to="/post"
-              className="btn btn-success block text-white px-3"
+              className="btn btn-secondary block text-white px-3"
               onClick={addPostClick}
             >
               기사 포스팅!
@@ -67,7 +67,7 @@ const AppNavbar = () => {
           {user && user.name ? (
             <Link to={`/user/${user.name}/profile`}>
               <Button outline color="light" className="px-3" block>
-                <strong>{user ? `Welcome ${user.name}` : ""}</strong>
+                <strong>Profile</strong>
               </Button>
             </Link>
           ) : (
@@ -105,7 +105,7 @@ const AppNavbar = () => {
       <Navbar color="dark" dark expand="lg" className="sticky-top">
         <Container>
           <Link to="/" className="text-white text-decoration-none">
-            Search Articles
+            Articles Page
           </Link>
           <NavbarToggler onClick={handleToggle} />
           <Collapse isOpen={isOpen} navbar>

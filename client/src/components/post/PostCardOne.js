@@ -35,8 +35,8 @@ const PostCardOne = ({ posts }) => {
                         </span>
                       </CardTitle>
                       <Row>
-                        <Button color="cyan" className="p-2 btn-block">
-                          More <Badge color="light">{comments.length}</Badge>
+                        <Button color="dark" className="p-2 btn-block">
+                          Go and Read! <Badge color="secondary">{comments.length}</Badge>
                         </Button>
                       </Row>
                     </CardBody>

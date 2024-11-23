@@ -17,7 +17,7 @@ const PostSchema = new mongoose.Schema({
   },
   fileUrl: {
     type: String,
-    default: "client/src/assets/img/page-image.png",
+    default: "../../client/src/assets/img/page-image.png",
   },
   date: {
     type: String,

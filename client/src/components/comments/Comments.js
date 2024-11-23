@@ -52,7 +52,7 @@ const Comments = ({ id, userName, userId }) => {
       <Form onSubmit={onSubmit}>
         <FormGroup>
           <Row className="p-2">
-            <div className="font-weight-bold m-1">Make Comment </div>
+            <div className="font-weight-bold m-1"> Make Comment! </div>
             <div className="my-1" />
             <Input
               innerRef={resetValue}

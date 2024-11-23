@@ -8,7 +8,7 @@ import { createBrowserHistory } from 'history'; // Import createBrowserHistory f
 // Create the history object
 export const history = createBrowserHistory();
 
-const { routerReducer, routerMiddleware, createHistory } = createReduxHistoryContext({
+const { routerReducer } = createReduxHistoryContext({
   history, // Pass the history object here
 });
 

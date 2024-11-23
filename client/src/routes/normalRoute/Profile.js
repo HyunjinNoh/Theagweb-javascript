@@ -66,7 +66,7 @@ const Profile = () => {
       <Col sm="12" md={{ size: 6, offset: 3 }}>
         <Card>
           <CardHeader>
-            <strong>Edit Password</strong>
+            <strong>비밀번호 삭제</strong>
           </CardHeader>
           <CardBody>
             <Form onSubmit={onSubmit}>
