@@ -22,21 +22,18 @@ import {
 } from "../types";
 
 // Login
-
 const loginUserAPI = (loginData) => {
-  console.log(loginData, "loginData");
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  return axios.post("api/auth", loginData, config);
+  return axios.post("/api/auth", loginData, config);
 };
 
 function* loginUser(action) {
   try {
     const result = yield call(loginUserAPI, action.payload);
-    console.log(result);
     yield put({
       type: LOGIN_SUCCESS,
       payload: result.data,
@@ -44,7 +41,7 @@ function* loginUser(action) {
   } catch (e) {
     yield put({
       type: LOGIN_FAILURE,
-      payload: e.response,
+      payload: e.response ? e.response.data : e.message,
     });
   }
 }
@@ -53,9 +50,8 @@ function* watchLoginUser() {
   yield takeEvery(LOGIN_REQUEST, loginUser);
 }
 
-// LOGOUT
-
-function* logout(action) {
+// Logout
+function* logout() {
   try {
     yield put({
       type: LOGOUT_SUCCESS,
@@ -63,27 +59,23 @@ function* logout(action) {
   } catch (e) {
     yield put({
       type: LOGOUT_FAILURE,
+      payload: e.message,
     });
-    console.log(e);
   }
 }
 
-function* watchlogout() {
+function* watchLogout() {
   yield takeEvery(LOGOUT_REQUEST, logout);
 }
 
 // Register
-
 const registerUserAPI = (req) => {
-  console.log(req, "req");
-
-  return axios.post("api/user", req);
+  return axios.post("/api/user", req);
 };
 
 function* registerUser(action) {
   try {
     const result = yield call(registerUserAPI, action.payload);
-    console.log(result, "RegisterUser Data");
     yield put({
       type: REGISTER_SUCCESS,
       payload: result.data,
@@ -91,17 +83,16 @@ function* registerUser(action) {
   } catch (e) {
     yield put({
       type: REGISTER_FAILURE,
-      payload: e.response,
+      payload: e.response ? e.response.data : e.message,
     });
   }
 }
 
-function* watchregisterUser() {
+function* watchRegisterUser() {
   yield takeEvery(REGISTER_REQUEST, registerUser);
 }
 
-// clear Error
-
+// Clear Error
 function* clearError() {
   try {
     yield put({
@@ -111,19 +102,15 @@ function* clearError() {
     yield put({
       type: CLEAR_ERROR_FAILURE,
     });
-    console.error(e);
   }
 }
 
-function* watchclearError() {
+function* watchClearError() {
   yield takeEvery(CLEAR_ERROR_REQUEST, clearError);
 }
 
 // User Loading
-
 const userLoadingAPI = (token) => {
-  console.log(token);
-
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -132,12 +119,11 @@ const userLoadingAPI = (token) => {
   if (token) {
     config.headers["x-auth-token"] = token;
   }
-  return axios.get("api/auth/user", config);
+  return axios.get("/api/auth/user", config);
 };
 
 function* userLoading(action) {
   try {
-    console.log(action, "userLoading");
     const result = yield call(userLoadingAPI, action.payload);
     yield put({
       type: USER_LOADING_SUCCESS,
@@ -146,35 +132,31 @@ function* userLoading(action) {
   } catch (e) {
     yield put({
       type: USER_LOADING_FAILURE,
-      payload: e.response,
+      payload: e.response ? e.response.data : e.message,
     });
   }
 }
 
-function* watchuserLoading() {
+function* watchUserLoading() {
   yield takeEvery(USER_LOADING_REQUEST, userLoading);
 }
 
 // Edit Password
-
-const EditPasswordAPI = (payload) => {
+const editPasswordAPI = (payload) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const token = payload.token;
-
-  if (token) {
-    config.headers["x-auth-token"] = token;
+  if (payload.token) {
+    config.headers["x-auth-token"] = payload.token;
   }
   return axios.post(`/api/user/${payload.userName}/profile`, payload, config);
 };
 
-function* EditPassword(action) {
+function* editPassword(action) {
   try {
-    console.log(action, "EditPassword");
-    const result = yield call(EditPasswordAPI, action.payload);
+    const result = yield call(editPasswordAPI, action.payload);
     yield put({
       type: PASSWORD_EDIT_UPLOADING_SUCCESS,
       payload: result.data,
@@ -182,22 +164,22 @@ function* EditPassword(action) {
   } catch (e) {
     yield put({
       type: PASSWORD_EDIT_UPLOADING_FAILURE,
-      payload: e.response,
+      payload: e.response ? e.response.data : e.message,
     });
   }
 }
 
 function* watchEditPassword() {
-  yield takeEvery(PASSWORD_EDIT_UPLOADING_REQUEST, EditPassword);
+  yield takeEvery(PASSWORD_EDIT_UPLOADING_REQUEST, editPassword);
 }
 
 export default function* authSaga() {
   yield all([
     fork(watchLoginUser),
-    fork(watchlogout),
-    fork(watchregisterUser),
-    fork(watchclearError),
-    fork(watchuserLoading),
+    fork(watchLogout),
+    fork(watchRegisterUser),
+    fork(watchClearError),
+    fork(watchUserLoading),
     fork(watchEditPassword),
   ]);
 }

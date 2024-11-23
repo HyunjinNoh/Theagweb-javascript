@@ -11,13 +11,15 @@ const PostWrite = () => {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://cdn.ckeditor.com/4.20.0/standard-all/ckeditor.js";
+    script.src = "https://cdn.ckeditor.com/4.20.0/full-all/ckeditor.js";
     script.onload = () => {
-      CKEDITOR.replace("editor", {
-        extraPlugins: "image2",
-        filebrowserUploadUrl: "/api/post/image",
-        filebrowserUploadMethod: "form",
-      });
+      if (document.getElementById("editor")) {
+        CKEDITOR.replace("editor", {
+          extraPlugins: "image2",
+          filebrowserUploadUrl: "/api/post/image",
+          filebrowserUploadMethod: "form",
+        });
+      }
     };
     document.body.appendChild(script);
   }, []);
@@ -25,7 +27,7 @@ const PostWrite = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const { title, category } = form;
-    const contents = CKEDITOR.instances.editor.getData(); // CKEditor 데이터 가져오기
+    const contents = CKEDITOR.instances.editor?.getData();
 
     if (!title || !contents || !category) {
       alert("All fields are required!");
